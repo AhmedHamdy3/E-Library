@@ -13,7 +13,7 @@ namespace E_Library.Models
         // Foreign Key
         public int CategoryId { get; set; }
         // Navigation Property
-        public Category Category { get; set; }
+        public virtual Category Category { get; set; }
         public virtual ICollection<UserBook> Users { get; set; }
     }
 }

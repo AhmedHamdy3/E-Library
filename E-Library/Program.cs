@@ -1,5 +1,6 @@
 
 using E_Library.Models;
+using E_Library.UOW;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,12 +21,20 @@ namespace E_Library
             #region Database & User Identity
             builder.Services.AddDbContext<ELibraryContext>(options =>
             {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                options.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
 
             builder.Services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<ELibraryContext>()
                 .AddDefaultTokenProviders();
+            #endregion
+
+            #region automapper
+            builder.Services.AddAutoMapper(typeof(Program).Assembly);
+            #endregion
+
+            #region UnitOfWork
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             #endregion
 
 
@@ -35,6 +44,7 @@ namespace E_Library
             if (app.Environment.IsDevelopment())
             {
                 app.MapOpenApi();
+                app.UseSwaggerUI(options => { options.SwaggerEndpoint("/openapi/v1.json", "v1"); });
             }
 
             app.UseHttpsRedirection();

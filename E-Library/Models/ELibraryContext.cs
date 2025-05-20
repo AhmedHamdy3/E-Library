@@ -36,12 +36,12 @@ namespace E_Library.Models
                 .HasOne(ub => ub.User)
                 .WithMany(u => u.Books)
                 .HasForeignKey(ub => ub.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
             builder.Entity<UserBook>()
                 .HasOne(ub => ub.Book)
                 .WithMany(b => b.Users)
                 .HasForeignKey(ub => ub.BookId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
             #endregion
         }
 

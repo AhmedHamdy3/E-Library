@@ -25,6 +25,12 @@ namespace E_Library.Repositories.Implementaions
             _dbSet.Remove(entity);
         }
 
+        public async Task<bool> ExistsAsync(Tkey id)
+        {
+            return await _dbSet.FindAsync(id) != null;
+
+        }
+
         public async Task<IEnumerable<TEntity>> GetAllAsync()
         {
             return await _dbSet.ToListAsync();
