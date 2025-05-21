@@ -1,8 +1,11 @@
 
 using E_Library.Models;
 using E_Library.UOW;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace E_Library
 {
@@ -37,7 +40,31 @@ namespace E_Library
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             #endregion
 
+            #region Authentication
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme =
+                    JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme =
+                    JwtBearerDefaults.AuthenticationScheme; 
+                options.DefaultScheme =
+                    JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new()
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = builder.Configuration["JWT:Iss"],
+                    ValidateAudience = true,
+                    ValidAudience = builder.Configuration["JWT:Aud"],
+                    IssuerSigningKey = new SymmetricSecurityKey
+                    (Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
+                };
+            });
 
+            #endregion
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

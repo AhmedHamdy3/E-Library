@@ -1,25 +1,16 @@
 ﻿using E_Library.CusotmValidation;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.ComponentModel.DataAnnotations;
 
 namespace E_Library.DTOS.User
 {
-    public class UserCreateDTO
+    public class UserUpdateDTO
     {
+        public string Id { get; set; }
         [Required(ErrorMessage = "Name is required")]
         [StringLength(50, MinimumLength = 2, ErrorMessage = "Name must be 2-50 characters")]
         [RegularExpression(@"^[a-zA-Z\s\-']+$",
             ErrorMessage = "Name can only contain letters, spaces, hyphens, and apostrophes")]
         public string Name { get; set; }
-
-        [Required(ErrorMessage = "Password is required")]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
-
-        [Required(ErrorMessage = "Please confirm your password")]
-        [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "Passwords do not match")]
-        public string ConfirmPassword { get; set; }
 
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress(ErrorMessage = "Invalid email format")]
@@ -28,8 +19,13 @@ namespace E_Library.DTOS.User
             ErrorMessage = "Invalid email format (e.g., user@example.com)")]
         public string Email { get; set; }
 
+        [Required(ErrorMessage = "Password is required")]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+
         [Required(ErrorMessage = "Role is required")]
         [ValidRole(ErrorMessage = "Invalid role selection")]
         public string Role { get; set; }
+
     }
 }

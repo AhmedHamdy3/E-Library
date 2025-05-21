@@ -11,9 +11,9 @@ namespace E_Library.Controllers
     [ApiController]
     public class BookController : ControllerBase
     {
-        IUnitOfWork _unitOfWork { get; set; }
-        IMapper _mapper { get; set; }
-        ILogger<BookController> _logger { get; set; }
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+        private readonly ILogger<BookController> _logger;
         public BookController(IUnitOfWork unitOfWork, IMapper mapper, ILogger<BookController> logger)
         {
             _unitOfWork = unitOfWork;
