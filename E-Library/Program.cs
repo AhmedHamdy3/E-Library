@@ -69,7 +69,12 @@ namespace E_Library
             #region Cors
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowAll", policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+                options.AddPolicy("AllowAll", policy => 
+                    policy.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .WithExposedHeaders("X-Total-Count", "X-Page-Number", "X-Page-Size")
+                    );
             });
             #endregion
 

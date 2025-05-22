@@ -51,13 +51,17 @@ namespace E_Library.Controllers
         {
             try
             {
-                var books = await _unitOfWork.BookRepository.GetPageAsync(page, pageSize);
+                var (books, totalCount) = await _unitOfWork.BookRepository.GetPageAsync(page, pageSize);
                 if (books == null || !books.Any())
                 {
                     _logger.LogWarning("No books found");
                     return NotFound("No books found");
                 }
                 IEnumerable<BookReadDTO> booksReadDTO = _mapper.Map<IEnumerable<BookReadDTO>>(books);
+
+                Response.Headers.Add("X-Total-Count", totalCount.ToString());
+                Response.Headers.Add("X-Page-Number", page.ToString());
+                Response.Headers.Add("X-Page-Size", pageSize.ToString());
                 return Ok(booksReadDTO);
             }
             catch (Exception ex)

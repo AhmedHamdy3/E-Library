@@ -63,7 +63,7 @@ namespace E_Library.Controllers
         {
             try
             {
-                var users = await _unitOfWork.UserRepository.GetPageAsync(page, pageSize);
+                var (users, totalCount) = await _unitOfWork.UserRepository.GetPageAsync(page, pageSize);
                 if (users == null || !users.Any())
                 {
                     _logger.LogWarning("No users found");
@@ -73,6 +73,11 @@ namespace E_Library.Controllers
                 {
                     opt.Items["UserManager"] = _userManager;
                 });
+                
+                Response.Headers.Add("X-Total-Count", totalCount.ToString());
+                Response.Headers.Add("X-Page-Number", page.ToString());
+                Response.Headers.Add("X-Page-Size", pageSize.ToString());
+
                 return Ok(usersReadDTO);
             }
             catch (Exception ex)

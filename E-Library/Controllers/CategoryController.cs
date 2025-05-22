@@ -53,13 +53,18 @@ namespace E_Library.Controllers
         {
             try
             {
-                var categories = await _unitOfWork.CategoryRepository.GetPageAsync(page, pageSize);
+                var (categories, totalCount) = await _unitOfWork.CategoryRepository.GetPageAsync(page, pageSize);
                 if (categories == null || !categories.Any())
                 {
                     _logger.LogWarning("No Categories found");
                     return NotFound("No categories found");
                 }
                 IEnumerable<CategoryReadDTO> categoriesReadDTO = _mapper.Map<IEnumerable<CategoryReadDTO>>(categories);
+             
+                Response.Headers.Add("X-Total-Count", totalCount.ToString());
+                Response.Headers.Add("X-Page-Number", page.ToString());
+                Response.Headers.Add("X-Page-Size", pageSize.ToString());
+                
                 return Ok(categoriesReadDTO);
             }
             catch (Exception ex)
