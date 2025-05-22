@@ -1,0 +1,50 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Add New Category</h2>
+    <button class="btn btn-outline-secondary" (click)="goBack()">
+      <i class="fa-solid fa-arrow-left"></i> Back to Categories
+    </button>
+  </div>
+
+  <form #categoryForm="ngForm" (ngSubmit)="onSubmit(categoryForm)">
+    <!-- Title -->
+    <div class="mb-3">
+      <label for="title" class="form-label">Name</label>
+      <input type="text" class="form-control" id="title" 
+             name="name" ngModel 
+             required minlength="2" maxlength="100"
+             #title="ngModel">
+      <div *ngIf="title.invalid && (title.dirty || title.touched)" class="text-danger">
+        <div *ngIf="title.errors?.['required']">Title is required</div>
+        <div *ngIf="title.errors?.['minlength']">Title must be at least 2 characters</div>
+        <div *ngIf="title.errors?.['maxlength']">Title cannot exceed 100 characters</div>
+      </div>
+    </div>
+
+    <!-- Description -->
+    <div class="mb-3">
+      <label for="description" class="form-label">Description</label>
+      <textarea class="form-control" id="description" 
+                name="description" ngModel
+                required minlength="10" maxlength="1000"
+                #description="ngModel" rows="3"></textarea>
+      <div *ngIf="description.invalid && (description.dirty || description.touched)" class="text-danger">
+        <div *ngIf="description.errors?.['required']">Description is required</div>
+        <div *ngIf="description.errors?.['minlength']">Description must be at least 10 characters</div>
+        <div *ngIf="description.errors?.['maxlength']">Description cannot exceed 1000 characters</div>
+      </div>
+    </div>
+
+
+    <!-- Error Message -->
+    <div *ngIf="formError" class="alert alert-danger mb-3">
+      {{ formError }}
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" class="btn btn-primary" [disabled]="categoryForm.invalid || isLoading">
+      <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+      {{ isLoading ? 'Adding...' : 'Add Category' }}
+    </button>
+  </form>
+</div>

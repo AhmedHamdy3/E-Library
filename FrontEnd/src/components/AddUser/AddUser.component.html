@@ -1,0 +1,104 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Add New User</h2>
+    <button class="btn btn-outline-secondary" (click)="goBack()">
+      <i class="fa-solid fa-arrow-left"></i> Back to Users
+    </button>
+  </div>
+
+  <form #userForm="ngForm" (ngSubmit)="onSubmit(userForm)">
+    <!-- Name Field -->
+    <div class="mb-3">
+      <label for="name" class="form-label">Full Name</label>
+      <input type="text" class="form-control" id="name" name="name" ngModel required minlength="2" maxlength="50"
+        pattern="^[a-zA-Z\s\-']+$" #name="ngModel">
+      <div *ngIf="name.invalid && (name.dirty || name.touched)" class="text-danger">
+        <div *ngIf="name.errors?.['required']">Name is required</div>
+        <div *ngIf="name.errors?.['minlength']">Name must be at least 2 characters</div>
+        <div *ngIf="name.errors?.['maxlength']">Name cannot exceed 50 characters</div>
+        <div *ngIf="name.errors?.['pattern']">
+          Name can only contain letters, spaces, hyphens, and apostrophes
+        </div>
+      </div>
+    </div>
+
+    <!-- Email Field -->
+    <div class="mb-3">
+      <label for="email" class="form-label">Email Address</label>
+      <input type="email" class="form-control" id="email" name="email" ngModel required maxlength="100"
+        pattern="^[^@\s]+@[^@\s]+\.[^@\s]+$" #email="ngModel">
+      <div *ngIf="email.invalid && (email.dirty || email.touched)" class="text-danger">
+        <div *ngIf="email.errors?.['required']">Email is required</div>
+        <div *ngIf="email.errors?.['maxlength']">Email cannot exceed 100 characters</div>
+        <div *ngIf="email.errors?.['pattern']">
+          Please enter a valid email address (e.g., user&commat;example.com)
+        </div>
+      </div>
+    </div>
+
+    <!-- Password Field -->
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <div class="input-group">
+        <input [type]="showPassword ? 'text' : 'password'" class="form-control" id="password" name="password" ngModel
+          required minlength="6" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).*$" #password="ngModel">
+        <button class="btn btn-outline-secondary" type="button" (click)="showPassword = !showPassword"
+          [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
+          <i class="fa-solid" [class.fa-eye]="!showPassword" [class.fa-eye-slash]="showPassword"></i>
+        </button>
+      </div>
+
+      <!-- Validation Messages -->
+      <div *ngIf="password.invalid && (password.dirty || password.touched)" class="text-danger">
+        <div *ngIf="password.errors?.['required']">Password is required</div>
+        <div *ngIf="password.errors?.['minlength']">Password must be at least 6 characters</div>
+        <div *ngIf="password.errors?.['pattern']">
+          Password must contain at least one uppercase, one lowercase, one number, and one special character
+        </div>
+      </div>
+    </div>
+
+    <!-- Confirm Password Field -->
+    <div class="mb-3">
+      <label for="confirmPassword" class="form-label">Confirm Password</label>
+      <div class="input-group">
+        <input [type]="showConfirmPassword ? 'text' : 'password'" class="form-control" id="confirmPassword"
+          name="confirmPassword" ngModel required #confirmPassword="ngModel">
+        <button class="btn btn-outline-secondary" type="button" (click)="showConfirmPassword = !showConfirmPassword">
+          <i class="fa-solid" [class.fa-eye]="!showConfirmPassword" [class.fa-eye-slash]="showConfirmPassword"></i>
+        </button>
+      </div>
+      <div *ngIf="(confirmPassword.dirty || confirmPassword.touched)" class="text-danger">
+        <div *ngIf="confirmPassword.errors?.['required']">Please confirm your password</div>
+        <div *ngIf="password.value && confirmPassword.value && password.value !== confirmPassword.value">
+          Passwords do not match
+        </div>
+      </div>
+    </div>
+
+    <!-- Role Field -->
+    <div class="mb-3">
+      <label for="role" class="form-label">User Role</label>
+      <select class="form-select" id="role" name="role" ngModel required #role="ngModel">
+        <option value="" disabled selected>Select a role</option>
+        <option value="Admin">Administrator</option>
+        <option value="User">Regular User</option>
+      </select>
+      <div *ngIf="role.invalid && (role.dirty || role.touched)" class="text-danger">
+        Role is required
+      </div>
+    </div>
+
+    <!-- Error Message -->
+    <div *ngIf="formError" class="alert alert-danger mb-3">
+      {{ formError }}
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" class="btn btn-primary"
+      [disabled]="userForm.invalid || isLoading || (password.value !== confirmPassword.value)">
+      <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+      {{ isLoading ? 'Creating User...' : 'Create User' }}
+    </button>
+  </form>
+</div>

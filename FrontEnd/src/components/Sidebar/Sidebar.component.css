@@ -1,0 +1,22 @@
+.sidebar {
+    width: 300px;
+    height: 100vh;
+    background: linear-gradient(to bottom, #4e73df, #224abe);
+    color: white;
+    padding-top: 20px;
+}
+.sidebar .nav-link {
+    color: #cfd8ff;
+    font-weight: 500;
+    cursor: pointer;
+}
+.sidebar .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+.sidebar .nav-link i {
+    margin-right: 10px;
+}
+.nav-link.active {
+    background-color: rgba(255, 255, 255, 0.2);
+}
