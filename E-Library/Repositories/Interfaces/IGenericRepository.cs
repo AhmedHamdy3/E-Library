@@ -4,6 +4,7 @@
     {
         Task<TEntity> GetByIdAsync(TKey id);
         Task<IEnumerable<TEntity>> GetAllAsync();
+        public Task<IEnumerable<TEntity>> GetPageAsync(int page, int pageSize);
         Task AddAsync(TEntity entity);
         Task UpdateAsync(TEntity entity);
         Task DeleteAsync(TKey id);

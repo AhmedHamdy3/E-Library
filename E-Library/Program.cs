@@ -65,6 +65,14 @@ namespace E_Library
             });
 
             #endregion
+
+            #region Cors
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            });
+            #endregion
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -76,8 +84,9 @@ namespace E_Library
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
+            app.UseCors("AllowAll");
 
+            app.UseAuthorization();
 
             app.MapControllers();
 

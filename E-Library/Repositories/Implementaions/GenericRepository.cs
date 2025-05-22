@@ -35,6 +35,10 @@ namespace E_Library.Repositories.Implementaions
         {
             return await _dbSet.ToListAsync();
         }
+        public async Task<IEnumerable<TEntity>> GetPageAsync(int page, int pageSize)
+        {
+            return await _dbSet.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+        }
 
         public async Task<TEntity> GetByIdAsync(Tkey id)
         {

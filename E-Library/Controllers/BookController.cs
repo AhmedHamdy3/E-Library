@@ -44,6 +44,29 @@ namespace E_Library.Controllers
             }
         }
 
+        [HttpGet("/api/bookPage")]
+        [ProducesResponseType(typeof(IEnumerable<BookReadDTO>), StatusCodes.Status202Accepted)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<BookReadDTO>>> GetBooks(int page = 1, int pageSize = 10)
+        {
+            try
+            {
+                var books = await _unitOfWork.BookRepository.GetPageAsync(page, pageSize);
+                if (books == null || !books.Any())
+                {
+                    _logger.LogWarning("No books found");
+                    return NotFound("No books found");
+                }
+                IEnumerable<BookReadDTO> booksReadDTO = _mapper.Map<IEnumerable<BookReadDTO>>(books);
+                return Ok(booksReadDTO);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting all books");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
+            }
+        }
+
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(BookReadDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

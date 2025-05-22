@@ -56,6 +56,32 @@ namespace E_Library.Controllers
             }
         }
 
+        [HttpGet("/api/userPage")]
+        [ProducesResponseType(typeof(IEnumerable<UserReadDTO>), StatusCodes.Status202Accepted)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<UserReadDTO>>> GetUsers(int page = 1, int pageSize = 10)
+        {
+            try
+            {
+                var users = await _unitOfWork.UserRepository.GetPageAsync(page, pageSize);
+                if (users == null || !users.Any())
+                {
+                    _logger.LogWarning("No users found");
+                    return NotFound("No users found");
+                }
+                IEnumerable<UserReadDTO> usersReadDTO = _mapper.Map<IEnumerable<UserReadDTO>>(users, opt =>
+                {
+                    opt.Items["UserManager"] = _userManager;
+                });
+                return Ok(usersReadDTO);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting all users");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
+            }
+        }
+
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(UserReadDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

@@ -8,7 +8,6 @@ namespace E_Library.DTOS.Category
         public string Name { get; set; }
         public string Description { get; set; }
 
-        // Navigation Property
         public virtual ICollection<BookReadDTO> Books { get; set; }
     }
 }

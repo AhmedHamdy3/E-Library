@@ -11,7 +11,7 @@ namespace E_Library.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     public class CategoryController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -43,6 +43,29 @@ namespace E_Library.Controllers
             catch (Exception ex) {
                 _logger.LogError(ex, "Error getting all categories");
                 return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");            
+            }
+        }
+
+        [HttpGet("/api/categoryPage")]
+        [ProducesResponseType(typeof(IEnumerable<CategoryReadDTO>), StatusCodes.Status202Accepted)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<CategoryReadDTO>>> GetCategories(int page = 1, int pageSize = 10)
+        {
+            try
+            {
+                var categories = await _unitOfWork.CategoryRepository.GetPageAsync(page, pageSize);
+                if (categories == null || !categories.Any())
+                {
+                    _logger.LogWarning("No Categories found");
+                    return NotFound("No categories found");
+                }
+                IEnumerable<CategoryReadDTO> categoriesReadDTO = _mapper.Map<IEnumerable<CategoryReadDTO>>(categories);
+                return Ok(categoriesReadDTO);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting all categories");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
             }
         }
 
