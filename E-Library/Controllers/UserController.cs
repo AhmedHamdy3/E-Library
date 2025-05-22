@@ -43,10 +43,19 @@ namespace E_Library.Controllers
                     _logger.LogWarning("No users found");
                     return NotFound("No users found");
                 }
-                IEnumerable<UserReadDTO> usersReadDTO = _mapper.Map<IEnumerable<UserReadDTO>>(users, opt =>
+                List<UserReadDTO> usersReadDTO = new List<UserReadDTO>();
+                foreach (var user in users)
                 {
-                    opt.Items["UserManager"] = _userManager;
-                });
+                    var roles = await _userManager.GetRolesAsync(user);
+                    UserReadDTO userReadDTO = new UserReadDTO
+                    {
+                        Id = user.Id,
+                        Name = user.Name,
+                        Email = user.Email,
+                        Role = roles.FirstOrDefault().ToString()
+                    };
+                    usersReadDTO.Add(userReadDTO);
+                }
                 return Ok(usersReadDTO);
             }
             catch (Exception ex)
@@ -69,10 +78,18 @@ namespace E_Library.Controllers
                     _logger.LogWarning("No users found");
                     return NotFound("No users found");
                 }
-                IEnumerable<UserReadDTO> usersReadDTO = _mapper.Map<IEnumerable<UserReadDTO>>(users, opt =>
-                {
-                    opt.Items["UserManager"] = _userManager;
-                });
+                List<UserReadDTO> usersReadDTO = new List<UserReadDTO>();
+                foreach (var user in users) { 
+                    var roles = await _userManager.GetRolesAsync(user);
+                    UserReadDTO userReadDTO = new UserReadDTO
+                    {
+                        Id = user.Id,
+                        Name = user.Name,
+                        Email = user.Email,
+                        Role = roles.FirstOrDefault().ToString()
+                    };
+                    usersReadDTO.Add(userReadDTO);
+                }
                 
                 Response.Headers.Add("X-Total-Count", totalCount.ToString());
                 Response.Headers.Add("X-Page-Number", page.ToString());
@@ -101,10 +118,14 @@ namespace E_Library.Controllers
                     _logger.LogWarning("User with id {Id} not found", id);
                     return NotFound();
                 }
-                UserReadDTO userReadDTO = _mapper.Map<UserReadDTO>(user, opt =>
+                var roles = await _userManager.GetRolesAsync(user);
+                UserReadDTO userReadDTO = new UserReadDTO
                 {
-                    opt.Items["UserManager"] = _userManager;
-                });
+                    Id = user.Id,
+                    Name = user.Name,
+                    Email = user.Email,
+                    Role = roles.FirstOrDefault().ToString()
+                };
                 return Ok(userReadDTO);
             }
             catch (Exception ex)
