@@ -47,15 +47,15 @@ namespace E_Library.Controllers
         [HttpGet("/api/bookPage")]
         [ProducesResponseType(typeof(IEnumerable<BookReadDTO>), StatusCodes.Status202Accepted)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<BookReadDTO>>> GetBooks(int page = 1, int pageSize = 10)
+        public async Task<ActionResult<IEnumerable<BookReadDTO>>> GetBooks(int page = 1, int pageSize = 10, string filter="")
         {
             try
             {
-                var (books, totalCount) = await _unitOfWork.BookRepository.GetPageAsync(page, pageSize);
+                var (books, totalCount) = await _unitOfWork.BookRepository.GetPageAsync(page, pageSize, filter);
                 if (books == null || !books.Any())
                 {
                     _logger.LogWarning("No books found");
-                    return NotFound("No books found");
+                    return NoContent();
                 }
                 IEnumerable<BookReadDTO> booksReadDTO = _mapper.Map<IEnumerable<BookReadDTO>>(books);
 

@@ -68,15 +68,15 @@ namespace E_Library.Controllers
         [HttpGet("/api/userPage")]
         [ProducesResponseType(typeof(IEnumerable<UserReadDTO>), StatusCodes.Status202Accepted)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<UserReadDTO>>> GetUsers(int page = 1, int pageSize = 10)
+        public async Task<ActionResult<IEnumerable<UserReadDTO>>> GetUsers(int page = 1, int pageSize = 10, string filter = "")
         {
             try
             {
-                var (users, totalCount) = await _unitOfWork.UserRepository.GetPageAsync(page, pageSize);
+                var (users, totalCount) = await _unitOfWork.UserRepository.GetPageAsync(page, pageSize, filter);
                 if (users == null || !users.Any())
                 {
                     _logger.LogWarning("No users found");
-                    return NotFound("No users found");
+                    return NoContent();
                 }
                 List<UserReadDTO> usersReadDTO = new List<UserReadDTO>();
                 foreach (var user in users) { 

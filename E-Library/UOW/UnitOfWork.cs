@@ -9,7 +9,7 @@ namespace E_Library.UOW
         ELibraryContext _context;
         public IBookRepository bookRepository;
         public IUserRepository userRepository;
-        public IGenericRepository<Category, int> categoryRepository;
+        public ICategoryRepository categoryRepository;
         public UnitOfWork(ELibraryContext context) {
             _context = context;
         }
@@ -25,13 +25,13 @@ namespace E_Library.UOW
             }
         }
 
-        public IGenericRepository<Category, int> CategoryRepository
+        public ICategoryRepository CategoryRepository
         {
             get
             {
                 if(categoryRepository == null)
                 {
-                    categoryRepository = new GenericRepository<Category, int>(_context);
+                    categoryRepository = new CategoryRepository(_context);
                 }
                 return categoryRepository;
             }

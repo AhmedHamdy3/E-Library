@@ -49,15 +49,15 @@ namespace E_Library.Controllers
         [HttpGet("/api/categoryPage")]
         [ProducesResponseType(typeof(IEnumerable<CategoryReadDTO>), StatusCodes.Status202Accepted)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<CategoryReadDTO>>> GetCategories(int page = 1, int pageSize = 10)
+        public async Task<ActionResult<IEnumerable<CategoryReadDTO>>> GetCategories(int page = 1, int pageSize = 10, string filter = "")
         {
             try
             {
-                var (categories, totalCount) = await _unitOfWork.CategoryRepository.GetPageAsync(page, pageSize);
+                var (categories, totalCount) = await _unitOfWork.CategoryRepository.GetPageAsync(page, pageSize, filter);
                 if (categories == null || !categories.Any())
                 {
                     _logger.LogWarning("No Categories found");
-                    return NotFound("No categories found");
+                    return NoContent();
                 }
                 IEnumerable<CategoryReadDTO> categoriesReadDTO = _mapper.Map<IEnumerable<CategoryReadDTO>>(categories);
              

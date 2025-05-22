@@ -19,10 +19,6 @@ namespace E_Library.DTOS.User
             ErrorMessage = "Invalid email format (e.g., user@example.com)")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Password is required")]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
-
         [Required(ErrorMessage = "Role is required")]
         [ValidRole(ErrorMessage = "Invalid role selection")]
         public string Role { get; set; }

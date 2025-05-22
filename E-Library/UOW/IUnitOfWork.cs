@@ -7,7 +7,7 @@ namespace E_Library.UOW
     {
         public IBookRepository BookRepository{ get; }
         public IUserRepository UserRepository { get; }
-        public IGenericRepository<Category, int> CategoryRepository { get; }
+        public ICategoryRepository CategoryRepository { get; }
         Task Save();
     }
 }
