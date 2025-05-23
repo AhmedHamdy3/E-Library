@@ -14,9 +14,9 @@ export class BookService {
 
     getBooks(page: number, pageSize: number, searchTerm: string): Observable<{ books: BookReadDTO[], totalCount: number }> {
         const params = new HttpParams()
-        .set('page', page.toString())
-        .set('pageSize', pageSize.toString())
-        .set('filter',searchTerm);
+            .set('page', page.toString())
+            .set('pageSize', pageSize.toString())
+            .set('filter', searchTerm);
 
         return this.http.get<BookReadDTO[]>(`${environment.baseUrl}/api/bookPage`, { params, observe: 'response' }).pipe(
             map(response => {
@@ -27,6 +27,44 @@ export class BookService {
                 };
             })
         );
+    }
+    getBooksForUser(page: number, pageSize: number, searchTerm: string): Observable<{ books: BookReadDTO[], totalCount: number }> {
+        const params = new HttpParams()
+            .set('page', page.toString())
+            .set('pageSize', pageSize.toString())
+            .set('filter', searchTerm);
+
+        return this.http.get<BookReadDTO[]>(`${environment.baseUrl}/api/book/userPage/8d219a6e-74ec-4a4f-a3f8-bc431491c177`, { params, observe: 'response' }).pipe(
+            map(response => {
+                const totalCount = Number(response.headers.get('X-Total-Count')) || 0;
+                return {
+                    books: response.body || [],
+                    totalCount: totalCount
+                };
+            })
+        );
+    }
+
+    buyBook(bookId: number): Observable<void> {
+        const params = new HttpParams()
+            .set('userId', "8d219a6e-74ec-4a4f-a3f8-bc431491c177")
+            .set('bookId', bookId.toString());
+
+        return this.http.get<void>(`${environment.baseUrl}/api/user/buy`, { params }).pipe(
+            catchError(error => {
+                // Handle specific error statuses
+                if (error.status === 404) {
+                    throw new Error(error.error || 'Resource not found');
+                } else if (error.status === 400) {
+                    throw new Error('You already own this book');
+                }
+                throw new Error('Failed to complete purchase');
+            })
+        );
+    }
+
+    getAllBooksForUser(): Observable<BookReadDTO[]> {
+        return this.http.get<BookReadDTO[]>(`${environment.baseUrl}/api/book/user/8d219a6e-74ec-4a4f-a3f8-bc431491c177`);
     }
 
     getBookById(id: number): Observable<BookReadDTO> {
@@ -42,7 +80,7 @@ export class BookService {
         return this.http.put(`${environment.baseUrl}/api/book/${id}`, book);
     }
 
-    deleteBook(id:number):Observable<any>{
+    deleteBook(id: number): Observable<any> {
         return this.http.delete(`${environment.baseUrl}/api/book/${id}`);
     }
 

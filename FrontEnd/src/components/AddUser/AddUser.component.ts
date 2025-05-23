@@ -33,7 +33,7 @@ export class AddUserComponent implements OnInit {
 
       this.userService.addUser(form.value).subscribe({
         next: () => {
-          this.router.navigate(['/users']);
+          this.router.navigate(['/admin/users']);
         },
         error: (err) => {
           this.formError = err.message || 'Failed to add user';
@@ -43,6 +43,6 @@ export class AddUserComponent implements OnInit {
     }
   }
   goBack() {
-    this.router.navigate(['/users']);
+    this.router.navigate(['/admin/users']);
   }
 }

@@ -1,8 +1,16 @@
-<!-- src/app/components/user-list/user-list.component.html -->
+<!-- src/app/components/book-list/book-list.component.html -->
 <div class="container mt-4">
   <div class="d-flex justify-content-between align-items-center mb-3">
-    <h3>Users Catalog</h3>
-    <a class="btn btn-primary" routerLink="/admin/addUser"><i class="fa-solid fa-plus"></i> Add User</a>
+    <h3>Books Catalog</h3>
+    <form class="d-none d-sm-inline-block form-inline my-2 my-md-0 mw-100" style="width: 500px;">
+      <div class="input-group">
+        <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+          (input)="onSearch($event)" [(ngModel)]="searchTerm" name="searchTerm"/>
+        <button class="btn btn-primary" type="button">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </form>
   </div>
 
   <!-- Loading State -->
@@ -10,13 +18,13 @@
     <div class="spinner-border text-primary" role="status">
       <span class="visually-hidden">Loading...</span>
     </div>
-    <p class="mt-2">Loading users...</p>
+    <p class="mt-2">Loading books...</p>
   </div>
 
   <!-- Error State -->
   <div *ngIf="error && !isLoading" class="alert alert-danger">
     <strong>Error:</strong> {{ error }}
-    <button class="btn btn-sm btn-outline-danger ms-3" (click)="loadUsers()">Retry</button>
+    <button class="btn btn-sm btn-outline-danger ms-3" (click)="loadBooks()">Retry</button>
   </div>
 
   <!-- Data Table -->
@@ -26,34 +34,30 @@
         <thead class="table-dark">
           <tr>
             <th *ngFor="let col of displayedColumns" [ngSwitch]="col">
-              <ng-container *ngSwitchCase="'id'">ID</ng-container>
-              <ng-container *ngSwitchCase="'name'">Name</ng-container>
-              <ng-container *ngSwitchCase="'email'">Email</ng-container>
-              <ng-container *ngSwitchCase="'role'">Role</ng-container>
+              <ng-container *ngSwitchCase="'title'">Title</ng-container>
+              <ng-container *ngSwitchCase="'author'">Author</ng-container>
+              <ng-container *ngSwitchCase="'price'">Price</ng-container>
+              <ng-container *ngSwitchCase="'category'">Category</ng-container>
               <ng-container *ngSwitchCase="'actions'"></ng-container>
             </th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let user of users">
-            <td>{{ user.id }}</td>
-            <td><strong>{{ user.name }}</strong></td>
-            <td>{{ user.email }}</td>
-            <td>{{ user.role }}</td>
+          <tr *ngFor="let book of books">
+            <td><strong>{{ book.title }}</strong></td>
+            <td>{{ book.author }}</td>
+            <td>{{ book.price | currency:'USD':'symbol':'1.2-2' }}</td>
+            <td>{{ book.category }}</td>
             <td>
-              <button class="btn btn-sm btn-outline-primary me-2" [routerLink]="['/admin/updateUser', user.id]">
-                <i class="fa-solid fa-square-pen"></i>
-              </button>
-              <button class="btn btn-sm btn-outline-danger" (click)="confirmDelete(user.id)" [disabled]="isDeleting">
-                <span *ngIf="isDeleting" class="spinner-border spinner-border-sm"></span>
-                <i *ngIf="!isDeleting" class="fa-solid fa-trash"></i>
+              <button class="btn btn-sm btn-outline-primary me-2">
+                <i class="fa-solid fa-download"></i> Download
               </button>
             </td>
           </tr>
         </tbody>
       </table>
 
-      <div *ngIf="!isLoading && !error && users.length > 0"
+      <div *ngIf="!isLoading && !error && books.length > 0"
         class="d-flex justify-content-between align-items-center mt-3">
         <div class="text-muted">
           {{getDisplayedRange()}}
@@ -80,8 +84,8 @@
       </div>
     </div>
 
-    <div *ngIf="users.length === 0" class="alert alert-info">
-      No users found in the catalog.
+    <div *ngIf="books.length === 0" class="alert alert-info">
+      No books found in the catalog.
     </div>
   </div>
 </div>

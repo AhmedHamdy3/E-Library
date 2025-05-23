@@ -55,7 +55,7 @@ export class UpdateCategoryComponent implements OnInit {
 
       this.categoryService.updateCategory(this.category.id, this.category).subscribe({
         next: () => {
-          this.router.navigate(['/category']);
+          this.router.navigate(['/admin/category']);
         },
         error: (err) => {
           this.formError = err.message || 'Failed to update category';
@@ -66,6 +66,6 @@ export class UpdateCategoryComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['/category']);
+    this.router.navigate(['/admin/category']);
   }
 }

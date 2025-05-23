@@ -8,16 +8,24 @@ import { UpdateCategoryComponent } from '../components/UpdateCategory/UpdateCate
 import { AddCategoryComponent } from '../components/AddCategory/AddCategory.component';
 import { AddUserComponent } from '../components/AddUser/AddUser.component';
 import { UpdateUserComponent } from '../components/UpdateUser/UpdateUser.component';
+import { BooksListComponent } from '../components/BooksList/BooksList.component';
+import { BookDetailsComponent } from '../components/BookDetails/BookDetails.component';
+import { HomeComponent } from '../components/Home/Home.component';
+import { MyBooksComponent } from '../components/myBooks/myBooks.component';
 
 export const routes: Routes = [
-    { path: 'users', component: UsersComponent },
-    { path: 'books', component: BooksComponent },
-    { path: 'addBook', component: AddBookComponent },
-    { path: 'addCategory', component: AddCategoryComponent },
-    { path: 'addUser', component: AddUserComponent },
-    { path: 'updateBook/:id', component: UpdateBookComponent },
-    { path: 'updateCategory/:id', component: UpdateCategoryComponent },
-    { path: 'updateUser/:id', component: UpdateUserComponent },
-    { path: 'category', component: CategoriesComponent },
-    { path: '', redirectTo: '/users', pathMatch: 'full' }, // default route
+    { path: 'admin/users', component: UsersComponent },
+    { path: 'admin/books', component: BooksComponent },
+    { path: 'admin/addBook', component: AddBookComponent },
+    { path: 'admin/addCategory', component: AddCategoryComponent },
+    { path: 'admin/addUser', component: AddUserComponent },
+    { path: 'admin/updateBook/:id', component: UpdateBookComponent },
+    { path: 'admin/updateCategory/:id', component: UpdateCategoryComponent },
+    { path: 'admin/updateUser/:id', component: UpdateUserComponent },
+    { path: 'admin/category', component: CategoriesComponent },
+    {path: 'booksList', component: BooksListComponent},
+    {path: 'home', component: HomeComponent},
+    {path: 'myBooks', component: MyBooksComponent},
+    {path: 'bookDetails/:id', component: BookDetailsComponent},
+    { path: '', redirectTo: '/admin/books', pathMatch: 'full' }, // default route
 ];

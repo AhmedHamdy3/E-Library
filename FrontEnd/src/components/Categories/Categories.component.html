@@ -2,7 +2,7 @@
 <div class="container mt-4">
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h3>Categories Catalog</h3>
-    <a class="btn btn-primary" routerLink="/addCategory"><i class="fa-solid fa-plus"></i> Add Category</a>
+    <a class="btn btn-primary" routerLink="/admin/addCategory"><i class="fa-solid fa-plus"></i> Add Category</a>
   </div>
 
   <!-- Loading State -->
@@ -39,7 +39,7 @@
             <td><strong>{{ category.name }}</strong></td>
             <td>{{ category.description }}</td>
             <td>
-              <button class="btn btn-sm btn-outline-primary me-2" [routerLink]="['/updateCategory', category.id]">
+              <button class="btn btn-sm btn-outline-primary me-2" [routerLink]="['/admin/updateCategory', category.id]">
                 <i class="fa-solid fa-square-pen"></i>
               </button>
               <button class="btn btn-sm btn-outline-danger" (click)="confirmDelete(category.id)" [disabled]="isDeleting">

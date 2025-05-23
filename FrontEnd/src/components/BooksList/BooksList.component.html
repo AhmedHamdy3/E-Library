@@ -2,7 +2,15 @@
 <div class="container mt-4">
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h3>Books Catalog</h3>
-    <a class="btn btn-primary" routerLink="/admin/addBook"><i class="fa-solid fa-plus"></i> Add Book</a>
+    <form class="d-none d-sm-inline-block form-inline my-2 my-md-0 mw-100" style="width: 500px;">
+      <div class="input-group">
+        <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+          (input)="onSearch($event)" [(ngModel)]="searchTerm" name="searchTerm"/>
+        <button class="btn btn-primary" type="button">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </form>
   </div>
 
   <!-- Loading State -->
@@ -26,7 +34,6 @@
         <thead class="table-dark">
           <tr>
             <th *ngFor="let col of displayedColumns" [ngSwitch]="col">
-              <ng-container *ngSwitchCase="'id'">ID</ng-container>
               <ng-container *ngSwitchCase="'title'">Title</ng-container>
               <ng-container *ngSwitchCase="'author'">Author</ng-container>
               <ng-container *ngSwitchCase="'price'">Price</ng-container>
@@ -37,18 +44,17 @@
         </thead>
         <tbody>
           <tr *ngFor="let book of books">
-            <td>{{ book.id }}</td>
             <td><strong>{{ book.title }}</strong></td>
             <td>{{ book.author }}</td>
             <td>{{ book.price | currency:'USD':'symbol':'1.2-2' }}</td>
             <td>{{ book.category }}</td>
             <td>
-              <button class="btn btn-sm btn-outline-primary me-2" [routerLink]="['/admin/updateBook', book.id]">
-                <i class="fa-solid fa-square-pen"></i>
+              <button class="btn btn-sm btn-outline-primary me-2" [routerLink]="['/bookDetails', book.id]">
+                <i class="fa-solid fa-circle-info"></i> Details
               </button>
-              <button class="btn btn-sm btn-outline-danger" (click)="confirmDelete(book.id)" [disabled]="isDeleting">
-                <span *ngIf="isDeleting" class="spinner-border spinner-border-sm"></span>
-                <i *ngIf="!isDeleting" class="fa-solid fa-trash"></i>
+
+              <button class="btn btn-sm btn-outline-success me-2" (click)="openPurchaseModal(book)">
+                <i class="fa-solid fa-cart-shopping"></i> Buy
               </button>
             </td>
           </tr>
@@ -87,3 +93,18 @@
     </div>
   </div>
 </div>
+
+
+<ng-template #purchaseModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Confirm Purchase</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+  </div>
+  <div class="modal-body">
+    <p>Are you sure you want to purchase "{{selectedBook.title}}"?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss()">Cancel</button>
+    <button type="button" class="btn btn-success" (click)="confirmPurchase()">Confirm</button>
+  </div>
+</ng-template>

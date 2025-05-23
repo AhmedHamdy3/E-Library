@@ -1,0 +1,12 @@
+.card {
+  border: none;
+  border-radius: 1rem;
+}
+
+.card-title {
+  font-size: 2rem;
+}
+
+/* .btn-outline-secondary:hover {
+  background-color: #f0f0f0;
+} */

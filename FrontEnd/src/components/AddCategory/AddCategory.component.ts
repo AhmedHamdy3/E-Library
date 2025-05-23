@@ -34,7 +34,7 @@ export class AddCategoryComponent implements OnInit {
 
       this.categoryService.addCategory(form.value).subscribe({
         next: () => {
-          this.router.navigate(['/category']);
+          this.router.navigate(['/admin/category']);
         },
         error: (err) => {
           this.formError = err.message || 'Failed to add category';
@@ -45,7 +45,7 @@ export class AddCategoryComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['/category']);
+    this.router.navigate(['/admin/category']);
   }
 
 }

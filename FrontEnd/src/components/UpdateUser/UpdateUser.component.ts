@@ -57,7 +57,7 @@ export class UpdateUserComponent implements OnInit {
 
       this.userService.updateUser(this.user.id, this.user).subscribe({
         next: () => {
-          this.router.navigate(['/users']);
+          this.router.navigate(['/admin/users']);
         },
         error: (err) => {
           this.formError = err.message || 'Failed to update user';
@@ -68,6 +68,6 @@ export class UpdateUserComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['/users']);
+    this.router.navigate(['/admin/users']);
   }
 }

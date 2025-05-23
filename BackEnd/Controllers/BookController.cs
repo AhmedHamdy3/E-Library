@@ -71,6 +71,58 @@ namespace E_Library.Controllers
             }
         }
 
+
+        [HttpGet("userPage/{userId}")]
+        [ProducesResponseType(typeof(IEnumerable<BookReadDTO>), StatusCodes.Status202Accepted)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<BookReadDTO>>> GetBooksForUser(string userId, int page = 1, int pageSize = 10, string filter = "")
+        {
+            try
+            {
+                var (books, totalCount) = await _unitOfWork.BookRepository.GetPageForSpecificUserAsync(userId, page, pageSize, filter);
+                if (books == null || !books.Any())
+                {
+                    _logger.LogWarning("No books found");
+                    return NoContent();
+                }
+                IEnumerable<BookReadDTO> booksReadDTO = _mapper.Map<IEnumerable<BookReadDTO>>(books);
+
+                Response.Headers.Add("X-Total-Count", totalCount.ToString());
+                Response.Headers.Add("X-Page-Number", page.ToString());
+                Response.Headers.Add("X-Page-Size", pageSize.ToString());
+                return Ok(booksReadDTO);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting all books");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
+            }
+        }
+
+        [HttpGet("user/{userId}")]
+        [ProducesResponseType(typeof(IEnumerable<BookReadDTO>), StatusCodes.Status202Accepted)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<BookReadDTO>>> GetBooksForUser(string userId)
+        {
+            try
+            {
+                var books= await _unitOfWork.BookRepository.GetPageForSpecificUserAsync(userId);
+                if (books == null || !books.Any())
+                {
+                    _logger.LogWarning("No books found");
+                    return NoContent();
+                }
+                IEnumerable<BookReadDTO> booksReadDTO = _mapper.Map<IEnumerable<BookReadDTO>>(books);
+
+                return Ok(booksReadDTO);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting all books");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
+            }
+        }
+
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(BookReadDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

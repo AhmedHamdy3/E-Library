@@ -77,7 +77,7 @@ export class UpdateBookComponent implements OnInit {
 
       this.bookService.updateBook(this.book.id, this.book).subscribe({
         next: () => {
-          this.router.navigate(['/books']);
+          this.router.navigate(['/admin/books']);
         },
         error: (err) => {
           this.formError = err.message || 'Failed to update book';
@@ -88,6 +88,6 @@ export class UpdateBookComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['/books']);
+    this.router.navigate(['/admin/books']);
   }
 }

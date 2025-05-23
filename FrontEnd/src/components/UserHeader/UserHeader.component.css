@@ -1,0 +1,23 @@
+.text-gray-600 {
+  color: #858796 !important;
+}
+.navbar {
+  height: 70px;
+}
+
+.custom-nav-link {
+  padding: 8px 16px;
+  margin-right: 8px;
+  border-radius: 8px;
+  color: #333;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.custom-nav-link.active,
+.custom-nav-link:hover {
+  background-color: #f1f1f1;
+  color: #007bff;
+  text-decoration: none;
+}

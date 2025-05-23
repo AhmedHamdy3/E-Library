@@ -50,7 +50,7 @@ export class AddBookComponent implements OnInit {
 
       this.bookService.addBook(form.value).subscribe({
         next: () => {
-          this.router.navigate(['/books']);
+          this.router.navigate(['/admin/books']);
         },
         error: (err) => {
           this.formError = err.message || 'Failed to add book';
@@ -61,7 +61,7 @@ export class AddBookComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['/books']);
+    this.router.navigate(['/admin/books']);
   }
 
 }

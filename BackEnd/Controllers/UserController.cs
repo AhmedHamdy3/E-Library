@@ -66,8 +66,8 @@ namespace E_Library.Controllers
         }
 
         [HttpGet("/api/userPage")]
-        [ProducesResponseType(typeof(IEnumerable<UserReadDTO>), StatusCodes.Status202Accepted)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(IEnumerable<UserReadDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult<IEnumerable<UserReadDTO>>> GetUsers(int page = 1, int pageSize = 10, string filter = "")
         {
             try
@@ -271,6 +271,43 @@ namespace E_Library.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error deleting user with id {Id}", id);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
+            }
+        }
+
+        [HttpGet("buy")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> buy(string userId, int bookId)
+        {
+            try
+            {
+                var user = await _unitOfWork.UserRepository.ExistsAsync(userId);
+                if (user == false)
+                {
+                    _logger.LogWarning("User with id {Id} not found", userId);
+                    return NotFound($"User with id {userId} not found");
+                }
+                var book = await _unitOfWork.BookRepository.ExistsAsync(bookId);
+                if (book == false)
+                {
+                    _logger.LogWarning("book with id {Id} not found", bookId);
+                    return NotFound($"book with id {bookId} not found");
+                }
+
+                bool isSuccess = await _unitOfWork.BookRepository.BuyBookAsync(bookId, userId);
+                if (!isSuccess)
+                {
+                    return BadRequest();
+                }
+
+                await _unitOfWork.Save();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error buying book with id {Id}", bookId);
                 return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
             }
         }
