@@ -1,0 +1,17 @@
+.login-container {
+  background-color: #f8f9fc;
+}
+.login-box {
+  background-color: white;
+  width: 100%;
+  max-width: 550px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-container{
+  margin-top: -35px;
+}
+hr{
+  margin: 0px;
+}

@@ -1,21 +1,32 @@
 <nav class="navbar navbar-expand navbar-light bg-white px-4 shadow-lg">
-  <!-- Search Box -->
-  <form class="d-none d-sm-inline-block form-inline me-auto ms-md-3 my-2 my-md-0 mw-100" style="width: 500px;">
-    <div class="input-group">
-      <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." (input)="onSearch($event)"/>
-      <button class="btn btn-primary" type="button">
-        <i class="fas fa-search"></i>
-      </button>
-    </div>
-  </form>
+  <div class="container-fluid d-flex justify-content-between align-items-center">
+    <!-- Search Box -->
+    <form class="d-none d-sm-inline-block form-inline me-auto ms-md-3 my-2 my-md-0 mw-100" style="width: 500px;">
+      <div class="input-group">
+        <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." (input)="onSearch($event)"/>
+        <button class="btn btn-primary" type="button">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </form>
+  
+    <!-- Right Icons -->
+    <ul class="navbar-nav d-flex align-items-center">
+      
+      <li class="nav-item position-relative me-3">
+        <a class="nav-link custom-nav-link" (click)="logout()" routerLinkActive="active">Logout</a>
+      </li>
 
-  <!-- Right Icons -->
-  <ul class="navbar-nav ms-auto d-flex align-items-center">
+      <!-- Vertical Divider -->
+      <li class="nav-item mx-2">
+        <div style="width: 1px; height: 30px; background-color: #ddd;"></div>
+      </li>
 
-    <!-- User Info -->
-    <li class="nav-item d-flex align-items-center">
-      <span class="me-2 text-gray-600 small">Douglas McGee</span>
-      <img class="rounded-circle" src="https://i.pravatar.cc/40?img=12" width="40" height="40" alt="User" />
-    </li>
-  </ul>
+      <!-- User Info -->
+      <li class="nav-item d-flex align-items-center">
+        <span class="me-2 text-gray-600 small">{{username}}</span>
+        <img class="rounded-circle" src="https://i.pravatar.cc/40?img=12" width="40" height="40" alt="User" />
+      </li>
+    </ul>
+  </div>
 </nav>

@@ -49,7 +49,7 @@
             <td>{{ book.price | currency:'USD':'symbol':'1.2-2' }}</td>
             <td>{{ book.category }}</td>
             <td>
-              <button class="btn btn-sm btn-outline-primary me-2" [routerLink]="['/bookDetails', book.id]">
+              <button class="btn btn-sm btn-outline-primary me-2" (click)="goToDetails(book.id)">
                 <i class="fa-solid fa-circle-info"></i> Details
               </button>
 

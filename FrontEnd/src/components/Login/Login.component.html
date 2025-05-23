@@ -1,0 +1,43 @@
+<div class="login-container d-flex justify-content-center align-items-center vh-100">
+  <div class="login-box p-5">
+    <h2 class="text-center mb-5">Welcome Back!</h2>
+
+    <form (ngSubmit)="onLogin()" #loginForm="ngForm">
+      <div *ngIf="errorMessage" class="alert alert-danger text-center">
+        {{ errorMessage }}
+      </div>
+      <div class="form-group mb-4">
+        <input [(ngModel)]="email" name="email" type="email" class="form-control form-control-lg rounded-pill" placeholder="Email" required>
+      </div>
+
+      <div class="form-group mb-4 position-relative">
+        <input [(ngModel)]="password" [type]="showPassword ? 'text' : 'password'" name="password" class="form-control form-control-lg rounded-pill" placeholder="Password" required>
+        <i class="toggle-password fa" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'" (click)="togglePassword()" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
+      </div>
+
+      <div class="form-check mb-4">
+        <input type="checkbox" class="form-check-input" id="rememberMe">
+        <label class="form-check-label" for="rememberMe">Remember Me</label>
+      </div>
+
+
+      <button type="submit" class="btn btn-primary btn-lg btn-block rounded-pill mb-4 w-100">Login</button>
+
+      <div class="text-center mb-4">
+        <hr>
+      </div>
+
+      <button type="button" class="btn btn-danger btn-lg btn-block rounded-pill mb-4 w-100">
+        <i class="fab fa-google"></i> Login with Google
+      </button>
+      <button type="button" class="btn btn-primary btn-lg btn-block rounded-pill w-100" style="background-color: #3b5998;">
+        <i class="fab fa-facebook-f"></i> Login with Facebook
+      </button>
+
+      <div class="text-center mt-4">
+        <a  class="d-block">Forgot Password?</a>
+        <a routerLink="/register">Create an Account!</a>
+      </div>
+    </form>
+  </div>
+</div>

@@ -34,7 +34,7 @@ export class BookService {
             .set('pageSize', pageSize.toString())
             .set('filter', searchTerm);
 
-        return this.http.get<BookReadDTO[]>(`${environment.baseUrl}/api/book/userPage/8d219a6e-74ec-4a4f-a3f8-bc431491c177`, { params, observe: 'response' }).pipe(
+        return this.http.get<BookReadDTO[]>(`${environment.baseUrl}/api/book/userPage/${localStorage.getItem("userId")}`, { params, observe: 'response' }).pipe(
             map(response => {
                 const totalCount = Number(response.headers.get('X-Total-Count')) || 0;
                 return {
@@ -47,7 +47,7 @@ export class BookService {
 
     buyBook(bookId: number): Observable<void> {
         const params = new HttpParams()
-            .set('userId', "8d219a6e-74ec-4a4f-a3f8-bc431491c177")
+            .set('userId', localStorage.getItem("userId")||"")
             .set('bookId', bookId.toString());
 
         return this.http.get<void>(`${environment.baseUrl}/api/user/buy`, { params }).pipe(
@@ -64,7 +64,7 @@ export class BookService {
     }
 
     getAllBooksForUser(): Observable<BookReadDTO[]> {
-        return this.http.get<BookReadDTO[]>(`${environment.baseUrl}/api/book/user/8d219a6e-74ec-4a4f-a3f8-bc431491c177`);
+        return this.http.get<BookReadDTO[]>(`${environment.baseUrl}/api/book/user/${localStorage.getItem("userId")}`) || [] as BookReadDTO[];
     }
 
     getBookById(id: number): Observable<BookReadDTO> {

@@ -8,18 +8,18 @@ import { environment } from '../environments/environment.development';
 
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class UserService {
 
-constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient) { }
 
 
     getUsers(page: number, pageSize: number, searchTerm: string): Observable<{ users: UserReadDTO[], totalCount: number }> {
         const params = new HttpParams()
-        .set('page', page.toString())
-        .set('pageSize', pageSize.toString())
-        .set('filter',searchTerm);
+            .set('page', page.toString())
+            .set('pageSize', pageSize.toString())
+            .set('filter', searchTerm);
 
         return this.http.get<UserReadDTO[]>(`${environment.baseUrl}/api/userPage`, { params, observe: 'response' }).pipe(
             map(response => {
@@ -33,22 +33,22 @@ constructor(private http: HttpClient) { }
     }
 
 
-        getUserById(id: string): Observable<UserReadDTO> {
-            return this.http.get<UserReadDTO>(`${environment.baseUrl}/api/user/${id}`).pipe(
-                catchError(this.handleError)
-            );
-        }
-        addUser(user: UserCreateDTO): Observable<any> {
-            return this.http.post(`${environment.baseUrl}/api/user`, user);
-        }
-    
-        updateUser(id: string, user: UserUpdateDTO): Observable<any> {
-            return this.http.put(`${environment.baseUrl}/api/user/${id}`, user);
-        }
-    
-        deleteUser(id:string):Observable<any>{
-            return this.http.delete(`${environment.baseUrl}/api/user/${id}`);
-        }
+    getUserById(id: string): Observable<UserReadDTO> {
+        return this.http.get<UserReadDTO>(`${environment.baseUrl}/api/user/${id}`).pipe(
+            catchError(this.handleError)
+        );
+    }
+    addUser(user: UserCreateDTO): Observable<any> {
+        return this.http.post(`${environment.baseUrl}/api/user`, user);
+    }
+
+    updateUser(id: string, user: UserUpdateDTO): Observable<any> {
+        return this.http.put(`${environment.baseUrl}/api/user/${id}`, user);
+    }
+
+    deleteUser(id: string): Observable<any> {
+        return this.http.delete(`${environment.baseUrl}/api/user/${id}`);
+    }
     private handleError(error: HttpErrorResponse) {
         let errorMessage = 'An unknown error occurred!';
         if (error.status === 404) {

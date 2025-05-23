@@ -6,14 +6,17 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
+import { AuthService } from '../../services/Auth.service';
+import { right } from '@popperjs/core';
 @Component({
   selector: 'app-BooksList',
   templateUrl: './BooksList.component.html',
   styleUrls: ['./BooksList.component.css'],
   providers: [BookService],
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule],
 })
 export class BooksListComponent implements OnInit {
+
   @ViewChild('purchaseModal') purchaseModal!: TemplateRef<any>; // Add this line
 
   selectedBook: BookReadDTO = {} as BookReadDTO;
@@ -36,7 +39,8 @@ export class BooksListComponent implements OnInit {
   constructor(
     private bookService: BookService,
     private modalService: NgbModal,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
@@ -47,7 +51,6 @@ export class BooksListComponent implements OnInit {
   loadBooks(): void {
     this.isLoading = true;
     this.error = null;
-    console.log(this.searchTerm)
     this.bookService.getBooks(this.currentPage, this.pageSize, this.searchTerm).subscribe({
       next: (response) => {
         this.books = response.books;
@@ -91,10 +94,16 @@ export class BooksListComponent implements OnInit {
 
 
   openPurchaseModal(book: BookReadDTO) {
+    console.log(this.authService.isLoggedIn)
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigateByUrl("/login")
+      return;
+    }
     this.selectedBook = book;
 
+
     // Check if already purchased
-    if (this.purchasedBooks.some(b => b.id === book.id)) {
+    if (this.purchasedBooks?.some(b => b.id === book.id)) {
       this.showAlreadyPurchasedAlert();
       return;
     }
@@ -120,7 +129,7 @@ export class BooksListComponent implements OnInit {
     this.bookService.buyBook(this.selectedBook.id).subscribe({
       next: () => {
         this.activeModalRef?.close();
-        this.router.navigateByUrl('/myBooks')
+        this.router.navigateByUrl('/user/myBooks')
       },
       error: (err) => {
         this.activeModalRef?.close();
@@ -180,5 +189,13 @@ export class BooksListComponent implements OnInit {
         console.error('Error fetching purchased books:', err);
       }
     });
+  }
+
+  goToDetails(bookId: number) {
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigateByUrl("/login")
+      return;
+    }
+    this.router.navigate(['/user/bookDetails', bookId])
   }
 }

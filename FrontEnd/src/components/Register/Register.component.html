@@ -1,0 +1,111 @@
+<div class="register-container d-flex justify-content-center align-items-center vh-100">
+  <div class="register-box p-5">
+    <h2 class="text-center mb-5">Create an Account</h2>
+
+    <form #userForm="ngForm" (ngSubmit)="onSubmit(userForm)">
+      <!-- Name Field -->
+      <div class="form-group mb-4">
+        <input type="text" class="form-control form-control-lg rounded-pill" placeholder="Full Name" id="name"
+          name="name" ngModel required minlength="2" maxlength="50" pattern="^[a-zA-Z\s\-']+$" #name="ngModel">
+        <div *ngIf="name.invalid && (name.dirty || name.touched)" class="text-danger">
+          <div *ngIf="name.errors?.['required']">Name is required</div>
+          <div *ngIf="name.errors?.['minlength']">Name must be at least 2 characters</div>
+          <div *ngIf="name.errors?.['maxlength']">Name cannot exceed 50 characters</div>
+          <div *ngIf="name.errors?.['pattern']">
+            Name can only contain letters, spaces, hyphens, and apostrophes
+          </div>
+        </div>
+      </div>
+
+      <!-- Email Field -->
+      <div class="form-group mb-4">
+        <input type="email" class="form-control form-control-lg rounded-pill" placeholder="Email" id="email"
+          name="email" ngModel required maxlength="100" pattern="^[^@\s]+@[^@\s]+\.[^@\s]+$" #email="ngModel">
+        <div *ngIf="email.invalid && (email.dirty || email.touched)" class="text-danger">
+          <div *ngIf="email.errors?.['required']">Email is required</div>
+          <div *ngIf="email.errors?.['maxlength']">Email cannot exceed 100 characters</div>
+          <div *ngIf="email.errors?.['pattern']">
+            Please enter a valid email address (e.g., user&commat;example.com)
+          </div>
+        </div>
+      </div>
+
+      <!-- Password Field -->
+      <div class="mb-4">
+        <div class="form-group position-relative">
+          <input [type]="showPassword ? 'text' : 'password'" class="form-control form-control-lg rounded-pill"
+            placeholder="Password" id="password" name="password" ngModel required minlength="6"
+            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).*$" #password="ngModel">
+          <i class="toggle-password fa" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'" (click)="togglePassword()"
+            style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
+        </div>
+
+        <!-- Validation Messages -->
+        <div *ngIf="password.invalid && (password.dirty || password.touched)" class="text-danger">
+          <div *ngIf="password.errors?.['required']">Password is required</div>
+          <div *ngIf="password.errors?.['minlength']">Password must be at least 6 characters</div>
+          <div *ngIf="password.errors?.['pattern']">
+            Password must contain at least one uppercase, one lowercase, one number, and one special character
+          </div>
+        </div>
+      </div>
+
+      <!-- Confirm Password Field -->
+      <div class="mb-4">
+        <div class="form-group position-relative">
+          <input [type]="showConfirmPassword ? 'text' : 'password'" class="form-control form-control-lg rounded-pill" placeholder="Confirm Password"
+           id="confirmPassword"
+            name="confirmPassword" ngModel required #confirmPassword="ngModel">
+          <i class="toggle-password fa" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'" (click)="toggleConfirmPassword()"
+            style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
+        </div>
+        <div *ngIf="(confirmPassword.dirty || confirmPassword.touched)" class="text-danger">
+          <div *ngIf="confirmPassword.errors?.['required']">Please confirm your password</div>
+          <div *ngIf="password.value && confirmPassword.value && password.value !== confirmPassword.value">
+            Passwords do not match
+          </div>
+        </div>
+      </div>
+
+      <!-- Role Field -->
+      <div class="mb-4">
+        <select class="form-select form-select-lg rounded-pill" id="role" name="role" ngModel required #role="ngModel">
+          <option value="" disabled selected>Select a role</option>
+          <option value="Admin">Administrator</option>
+          <option value="User">Regular User</option>
+        </select>
+        <div *ngIf="role.invalid && (role.dirty || role.touched)" class="text-danger">
+          Role is required
+        </div>
+      </div>
+
+      <!-- Error Message -->
+      <div *ngIf="formError" class="alert alert-danger mb-3">
+        {{ formError }}
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="btn btn-primary btn-lg btn-block rounded-pill mb-4 w-100"
+        [disabled]="userForm.invalid || isLoading || (password.value !== confirmPassword.value)">
+        <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        {{ isLoading ? 'Creating User...' : 'Create User' }}
+      </button>
+
+            <div class="text-center mb-4">
+        <hr>
+      </div>
+
+      <button type="button" class="btn btn-danger btn-lg btn-block rounded-pill mb-4 w-100">
+        <i class="fab fa-google"></i> Login with Google
+      </button>
+      <button type="button" class="btn btn-primary btn-lg btn-block rounded-pill w-100" style="background-color: #3b5998;">
+        <i class="fab fa-facebook-f"></i> Login with Facebook
+      </button>
+
+      <div class="text-center mt-4">
+        <a class="d-block">Forgot Password?</a>
+        <a routerLink="/login">Already have an account? Login!</a>
+      </div>
+    </form>
+  </div>
+</div>

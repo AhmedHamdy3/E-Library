@@ -8,7 +8,7 @@ namespace E_Library.DTOS.User
         [EmailAddress(ErrorMessage = "Invalid email format")]
         [MaxLength(100, ErrorMessage = "Email cannot exceed 100 characters")]
         [RegularExpression(@"^[^@\s]+@[^@\s]+\.[^@\s]+$",
-            ErrorMessage = "Invalid email format (e.g., user@example.com)")]
+        ErrorMessage = "Invalid email format (e.g., user@example.com)")]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Password is required")]

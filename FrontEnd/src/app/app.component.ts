@@ -6,7 +6,7 @@ import { UserHeaderComponent } from "../components/UserHeader/UserHeader.compone
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, SidebarComponent, HeaderComponent],
+  imports: [RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

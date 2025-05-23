@@ -5,24 +5,26 @@
         Home</a>
       <a class="nav-link custom-nav-link" routerLink="booksList" routerLinkActive="active"><i
           class="fa-solid fa-book"></i> Books List</a>
-      <a class="nav-link custom-nav-link" routerLink="myBooks" routerLinkActive="active">
-        <i class="fa-solid fa-book-open-reader"></i> my Books</a>
     </div>
 
+    <!-- Right Icons -->
     <ul class="navbar-nav d-flex align-items-center">
+
       <li class="nav-item position-relative me-3">
-        <a class="nav-link custom-nav-link" (click)="logout()" routerLinkActive="active">Logout</a>
+        <a class="nav-link custom-nav-link" routerLink="login" routerLinkActive="active">Login</a>
       </li>
 
       <!-- Vertical Divider -->
       <li class="nav-item mx-2">
         <div style="width: 1px; height: 30px; background-color: #ddd;"></div>
       </li>
-      
+
       <!-- User Info -->
       <li class="nav-item d-flex align-items-center">
-        <span class="me-2 text-gray-600 small">{{username}}</span>
-        <img class="rounded-circle" src="https://i.pravatar.cc/40?img=12" width="40" height="40" alt="User" />
+        <a class="nav-link custom-nav-link" routerLink="register" routerLinkActive="active">Register</a>
+        <!-- <button type="button" (click)="register()" class="btn btn-light d-flex align-items-center gap-2">
+          Register
+        </button> -->
       </li>
     </ul>
   </div>

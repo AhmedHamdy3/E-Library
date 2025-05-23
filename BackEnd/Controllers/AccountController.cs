@@ -104,55 +104,9 @@ namespace E_Library.Controllers
                 token = new JwtSecurityTokenHandler().WriteToken(token),
                 expiration = token.ValidTo,
                 username = user.Name,
-                roles = userRoles
+                roles = userRoles,
+                id = user.Id
             });
-
-            //if (!ModelState.IsValid)
-            //{
-            //    return BadRequest(ModelState);
-            //}
-
-            //var user = await _userManager.FindByEmailAsync(userLoginDTo.Email);
-            //if (user == null) {
-            //    return Unauthorized("Invalid Credentials");
-            //}
-
-            //var isPasswordValid = await _userManager.CheckPasswordAsync(user, userLoginDTo.Password);
-            //if (!isPasswordValid) {
-            //    return Unauthorized("Invalid Credentials");
-            //}
-
-            //var userRoles = await _userManager.GetRolesAsync(user);
-
-            //var authClaims = new List<Claim>
-            //{
-            //    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            //    new Claim(ClaimTypes.Name, user.Name),
-            //    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            //};
-
-            //foreach(var role in userRoles)
-            //{
-            //    authClaims.Add(new Claim(ClaimTypes.Role, role));
-            //}
-
-            //var authSigninKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:Key"]));
-
-            //var token = new JwtSecurityToken(
-            //    issuer: _config["JWT:Iss"],
-            //    audience: _config["JWT: Aud"],
-            //    expires: DateTime.Now.AddHours(1),
-            //    claims: authClaims,
-            //    signingCredentials: new SigningCredentials(authSigninKey, SecurityAlgorithms.HmacSha256)
-            //);
-
-            //return Ok(new
-            //{
-            //    token = new JwtSecurityTokenHandler().WriteToken(token),
-            //    expiration = token.ValidTo,
-            //    username = user.Name,
-            //    roles = userRoles
-            //});
         }
     }
 }

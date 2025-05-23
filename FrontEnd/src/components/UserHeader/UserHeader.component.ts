@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { AuthService } from '../../services/Auth.service';
 @Component({
   selector: 'app-UserHeader',
   templateUrl: './UserHeader.component.html',
@@ -7,10 +8,15 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   imports: [RouterLink, RouterLinkActive]
 })
 export class UserHeaderComponent implements OnInit {
+  username: string | null = localStorage.getItem("username")
 
-  constructor() { }
+  constructor(private authService: AuthService, private router:Router) { }
 
   ngOnInit() {
   }
 
+  logout(){
+    this.authService.logout();
+    this.router.navigateByUrl("/")
+  }
 }
