@@ -2,6 +2,7 @@
 using E_Library.DTOS.Book;
 using E_Library.Models;
 using E_Library.UOW;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,7 +21,7 @@ namespace E_Library.Controllers
             _mapper = mapper;
             _logger = logger;
         }
-
+        
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<BookReadDTO>), StatusCodes.Status202Accepted)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -71,7 +72,7 @@ namespace E_Library.Controllers
             }
         }
 
-
+        [Authorize(Roles = "User")]
         [HttpGet("userPage/{userId}")]
         [ProducesResponseType(typeof(IEnumerable<BookReadDTO>), StatusCodes.Status202Accepted)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -99,6 +100,7 @@ namespace E_Library.Controllers
             }
         }
 
+        [Authorize(Roles = "User")]
         [HttpGet("user/{userId}")]
         [ProducesResponseType(typeof(IEnumerable<BookReadDTO>), StatusCodes.Status202Accepted)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -123,6 +125,7 @@ namespace E_Library.Controllers
             }
         }
 
+        [Authorize(Roles = "User")]
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(BookReadDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -147,6 +150,7 @@ namespace E_Library.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ProducesResponseType(typeof(BookReadDTO), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -180,6 +184,7 @@ namespace E_Library.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -213,6 +218,7 @@ namespace E_Library.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

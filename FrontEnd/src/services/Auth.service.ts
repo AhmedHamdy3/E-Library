@@ -48,4 +48,8 @@ export class AuthService {
     if (localStorage.getItem("roles") == 'User') return true
     else return false
   }
+
+  getUserId(): string | null {
+    return localStorage.getItem("userId")
+  }
 }

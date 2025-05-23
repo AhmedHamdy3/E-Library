@@ -1,16 +1,17 @@
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BookReadDTO } from '../models/Book/BookReadDTO';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { environment } from '../environments/environment.development';
 import { BookCreateDTO } from '../models/Book/BookCreateDTO';
 import { BookUpdateDTO } from '../models/Book/BookUpdateDTO';
+import { AuthService } from './Auth.service';
 
 
 @Injectable()
 export class BookService {
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient, private authService: AuthService) { }
 
     getBooks(page: number, pageSize: number, searchTerm: string): Observable<{ books: BookReadDTO[], totalCount: number }> {
         const params = new HttpParams()
@@ -18,7 +19,11 @@ export class BookService {
             .set('pageSize', pageSize.toString())
             .set('filter', searchTerm);
 
-        return this.http.get<BookReadDTO[]>(`${environment.baseUrl}/api/bookPage`, { params, observe: 'response' }).pipe(
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${this.authService.getToken()}`
+        });
+
+        return this.http.get<BookReadDTO[]>(`${environment.baseUrl}/api/bookPage`, { params, headers, observe: 'response' }).pipe(
             map(response => {
                 const totalCount = Number(response.headers.get('X-Total-Count')) || 0;
                 return {
@@ -34,7 +39,11 @@ export class BookService {
             .set('pageSize', pageSize.toString())
             .set('filter', searchTerm);
 
-        return this.http.get<BookReadDTO[]>(`${environment.baseUrl}/api/book/userPage/${localStorage.getItem("userId")}`, { params, observe: 'response' }).pipe(
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${this.authService.getToken()}`
+        });
+
+        return this.http.get<BookReadDTO[]>(`${environment.baseUrl}/api/book/userPage/${this.authService.getUserId()}`, { params, headers, observe: 'response' }).pipe(
             map(response => {
                 const totalCount = Number(response.headers.get('X-Total-Count')) || 0;
                 return {
@@ -47,10 +56,14 @@ export class BookService {
 
     buyBook(bookId: number): Observable<void> {
         const params = new HttpParams()
-            .set('userId', localStorage.getItem("userId")||"")
+            .set('userId', this.authService.getUserId() || "")
             .set('bookId', bookId.toString());
 
-        return this.http.get<void>(`${environment.baseUrl}/api/user/buy`, { params }).pipe(
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${this.authService.getToken()}`
+        });
+
+        return this.http.get<void>(`${environment.baseUrl}/api/user/buy`, { params, headers }).pipe(
             catchError(error => {
                 // Handle specific error statuses
                 if (error.status === 404) {
@@ -64,24 +77,41 @@ export class BookService {
     }
 
     getAllBooksForUser(): Observable<BookReadDTO[]> {
-        return this.http.get<BookReadDTO[]>(`${environment.baseUrl}/api/book/user/${localStorage.getItem("userId")}`) || [] as BookReadDTO[];
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${this.authService.getToken()}`
+        });
+
+        return this.http.get<BookReadDTO[]>(`${environment.baseUrl}/api/book/user/${this.authService.getUserId()}`, { headers }) || [] as BookReadDTO[];
     }
 
     getBookById(id: number): Observable<BookReadDTO> {
-        return this.http.get<BookReadDTO>(`${environment.baseUrl}/api/book/${id}`).pipe(
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${this.authService.getToken()}`
+        });
+
+        return this.http.get<BookReadDTO>(`${environment.baseUrl}/api/book/${id}`, { headers }).pipe(
             catchError(this.handleError)
         );
     }
     addBook(book: BookCreateDTO): Observable<any> {
-        return this.http.post(`${environment.baseUrl}/api/book`, book);
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${this.authService.getToken()}`
+        });
+        return this.http.post(`${environment.baseUrl}/api/book`, book, { headers });
     }
 
     updateBook(id: number, book: BookUpdateDTO): Observable<any> {
-        return this.http.put(`${environment.baseUrl}/api/book/${id}`, book);
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${this.authService.getToken()}`
+        });
+        return this.http.put(`${environment.baseUrl}/api/book/${id}`, book, { headers });
     }
 
     deleteBook(id: number): Observable<any> {
-        return this.http.delete(`${environment.baseUrl}/api/book/${id}`);
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${this.authService.getToken()}`
+        });
+        return this.http.delete(`${environment.baseUrl}/api/book/${id}`, { headers });
     }
 
     private handleError(error: HttpErrorResponse) {

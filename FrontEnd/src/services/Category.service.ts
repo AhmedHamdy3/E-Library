@@ -1,25 +1,33 @@
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CategoryReadDTO } from '../models/Category/CategoryReadDTO';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { environment } from '../environments/environment.development';
 import { CategoryCreateDTO } from '../models/Category/CategoryCreateDTO';
 import { CategoryUpdateDTO } from '../models/Category/CategoryUpdateDTO';
+import { AuthService } from './Auth.service';
 
 @Injectable()
 export class CategoryService {
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient, private authService: AuthService) { }
     getCategories(): Observable<CategoryReadDTO[]> {
-        return this.http.get<CategoryReadDTO[]>(`${environment.baseUrl}/api/category`);
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${this.authService.getToken()}`
+        });
+        return this.http.get<CategoryReadDTO[]>(`${environment.baseUrl}/api/category`, { headers });
     }
 
     getCategoriesPage(page: number, pageSize: number, searchTerm: string): Observable<{ categories: CategoryReadDTO[], totalCount: number }> {
         const params = new HttpParams()
-        .set('page', page.toString())
-        .set('pageSize', pageSize.toString())
-        .set('filter',searchTerm);
-        return this.http.get<CategoryReadDTO[]>(`${environment.baseUrl}/api/categoryPage`, { params, observe: 'response' }).pipe(
+            .set('page', page.toString())
+            .set('pageSize', pageSize.toString())
+            .set('filter', searchTerm);
+
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${this.authService.getToken()}`
+        });
+        return this.http.get<CategoryReadDTO[]>(`${environment.baseUrl}/api/categoryPage`, { params, headers, observe: 'response' }).pipe(
             map(response => {
                 const totalCount = Number(response.headers.get('X-Total-Count')) || 0;
                 return {
@@ -31,20 +39,32 @@ export class CategoryService {
     }
 
     getCategoryById(id: number): Observable<CategoryReadDTO> {
-        return this.http.get<CategoryReadDTO>(`${environment.baseUrl}/api/category/${id}`).pipe(
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${this.authService.getToken()}`
+        });
+        return this.http.get<CategoryReadDTO>(`${environment.baseUrl}/api/category/${id}`, { headers }).pipe(
             catchError(this.handleError)
         );
     }
     addCategory(category: CategoryCreateDTO): Observable<any> {
-        return this.http.post(`${environment.baseUrl}/api/category`, category);
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${this.authService.getToken()}`
+        });
+        return this.http.post(`${environment.baseUrl}/api/category`, category, { headers });
     }
 
     updateCategory(id: number, category: CategoryUpdateDTO): Observable<any> {
-        return this.http.put(`${environment.baseUrl}/api/category/${id}`, category);
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${this.authService.getToken()}`
+        });
+        return this.http.put(`${environment.baseUrl}/api/category/${id}`, category, { headers });
     }
 
-    deleteCategory(id:number):Observable<any>{
-        return this.http.delete(`${environment.baseUrl}/api/category/${id}`);
+    deleteCategory(id: number): Observable<any> {
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${this.authService.getToken()}`
+        });
+        return this.http.delete(`${environment.baseUrl}/api/category/${id}`, { headers });
     }
 
     private handleError(error: HttpErrorResponse) {

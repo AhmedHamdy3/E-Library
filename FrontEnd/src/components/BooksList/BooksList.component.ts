@@ -45,7 +45,9 @@ export class BooksListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadBooks();
-    this.loadPurchasedBooks();
+    if(this.authService.isLoggedIn()){
+      this.loadPurchasedBooks();
+    }
   }
 
   loadBooks(): void {

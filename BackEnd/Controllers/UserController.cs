@@ -5,6 +5,7 @@ using E_Library.DTOS.User;
 using E_Library.Models;
 using E_Library.Repositories.Interfaces;
 using E_Library.UOW;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -30,6 +31,7 @@ namespace E_Library.Controllers
             _logger = logger;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<UserReadDTO>), StatusCodes.Status202Accepted)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -65,6 +67,7 @@ namespace E_Library.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("/api/userPage")]
         [ProducesResponseType(typeof(IEnumerable<UserReadDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -104,6 +107,7 @@ namespace E_Library.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(UserReadDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -135,10 +139,11 @@ namespace E_Library.Controllers
             }
         }
 
+
         [HttpPost]
         [ProducesResponseType(typeof(UserReadDTO), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> AddCategory(UserCreateDTO userCreateDTO)
+        public async Task<ActionResult> AddUser(UserCreateDTO userCreateDTO)
         {
             try
             {
@@ -183,7 +188,7 @@ namespace E_Library.Controllers
             }
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -245,6 +250,7 @@ namespace E_Library.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -275,6 +281,8 @@ namespace E_Library.Controllers
             }
         }
 
+
+        [Authorize(Roles = "User")]
         [HttpGet("buy")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

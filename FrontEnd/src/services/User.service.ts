@@ -1,10 +1,11 @@
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { UserCreateDTO } from '../models/User/UserCreateDTO';
 import { UserReadDTO } from '../models/User/UserReadDTO';
 import { UserUpdateDTO } from '../models/User/UserUpdateDTO';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { environment } from '../environments/environment.development';
+import { AuthService } from './Auth.service';
 
 
 @Injectable({
@@ -12,7 +13,7 @@ import { environment } from '../environments/environment.development';
 })
 export class UserService {
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient, private authService: AuthService) { }
 
 
     getUsers(page: number, pageSize: number, searchTerm: string): Observable<{ users: UserReadDTO[], totalCount: number }> {
@@ -21,7 +22,11 @@ export class UserService {
             .set('pageSize', pageSize.toString())
             .set('filter', searchTerm);
 
-        return this.http.get<UserReadDTO[]>(`${environment.baseUrl}/api/userPage`, { params, observe: 'response' }).pipe(
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${this.authService.getToken()}`
+        });
+
+        return this.http.get<UserReadDTO[]>(`${environment.baseUrl}/api/userPage`, { params, headers, observe: 'response' }).pipe(
             map(response => {
                 const totalCount = Number(response.headers.get('X-Total-Count')) || 0;
                 return {
@@ -34,20 +39,32 @@ export class UserService {
 
 
     getUserById(id: string): Observable<UserReadDTO> {
-        return this.http.get<UserReadDTO>(`${environment.baseUrl}/api/user/${id}`).pipe(
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${this.authService.getToken()}`
+        });
+        return this.http.get<UserReadDTO>(`${environment.baseUrl}/api/user/${id}`, { headers }).pipe(
             catchError(this.handleError)
         );
     }
     addUser(user: UserCreateDTO): Observable<any> {
-        return this.http.post(`${environment.baseUrl}/api/user`, user);
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${this.authService.getToken()}`
+        });
+        return this.http.post(`${environment.baseUrl}/api/user`, user, { headers });
     }
 
     updateUser(id: string, user: UserUpdateDTO): Observable<any> {
-        return this.http.put(`${environment.baseUrl}/api/user/${id}`, user);
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${this.authService.getToken()}`
+        });
+        return this.http.put(`${environment.baseUrl}/api/user/${id}`, user, { headers });
     }
 
     deleteUser(id: string): Observable<any> {
-        return this.http.delete(`${environment.baseUrl}/api/user/${id}`);
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${this.authService.getToken()}`
+        });
+        return this.http.delete(`${environment.baseUrl}/api/user/${id}`, { headers });
     }
     private handleError(error: HttpErrorResponse) {
         let errorMessage = 'An unknown error occurred!';
@@ -62,4 +79,6 @@ export class UserService {
         }
         return throwError(() => new Error(errorMessage));
     }
+
+
 }

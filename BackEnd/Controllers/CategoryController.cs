@@ -11,7 +11,6 @@ namespace E_Library.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(Roles = "Admin")]
     public class CategoryController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -24,6 +23,7 @@ namespace E_Library.Controllers
             _logger = logger;
         }
 
+        [Authorize(Roles = "User, Admin")]
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<CategoryReadDTO>), StatusCodes.Status202Accepted)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -46,6 +46,7 @@ namespace E_Library.Controllers
             }
         }
 
+        [Authorize(Roles = "User, Admin")]
         [HttpGet("/api/categoryPage")]
         [ProducesResponseType(typeof(IEnumerable<CategoryReadDTO>), StatusCodes.Status202Accepted)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -74,6 +75,7 @@ namespace E_Library.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(CategoryReadDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -97,6 +99,7 @@ namespace E_Library.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ProducesResponseType(typeof(CategoryReadDTO), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -128,6 +131,7 @@ namespace E_Library.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -161,6 +165,7 @@ namespace E_Library.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
