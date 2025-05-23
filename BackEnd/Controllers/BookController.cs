@@ -125,7 +125,7 @@ namespace E_Library.Controllers
             }
         }
 
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = "Admin, User")]
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(BookReadDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
